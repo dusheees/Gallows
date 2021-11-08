@@ -9,21 +9,25 @@
 /* Begin PBXBuildFile section */
 		55593E6927390E8000FD1D91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55593E6827390E8000FD1D91 /* AppDelegate.swift */; };
 		55593E6B27390E8000FD1D91 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55593E6A27390E8000FD1D91 /* SceneDelegate.swift */; };
-		55593E6D27390E8000FD1D91 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55593E6C27390E8000FD1D91 /* ViewController.swift */; };
+		55593E6D27390E8000FD1D91 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55593E6C27390E8000FD1D91 /* WelcomeViewController.swift */; };
 		55593E7027390E8000FD1D91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55593E6E27390E8000FD1D91 /* Main.storyboard */; };
 		55593E7227390E8000FD1D91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55593E7127390E8000FD1D91 /* Assets.xcassets */; };
 		55593E7527390E8000FD1D91 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55593E7327390E8000FD1D91 /* LaunchScreen.storyboard */; };
+		55593E7E2739102600FD1D91 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55593E7D2739102600FD1D91 /* GameViewController.swift */; };
+		559318E027396E220013DE3E /* WordsForGames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559318DF27396E220013DE3E /* WordsForGames.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		55593E6527390E8000FD1D91 /* Gallows.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gallows.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55593E6827390E8000FD1D91 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55593E6A27390E8000FD1D91 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		55593E6C27390E8000FD1D91 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		55593E6C27390E8000FD1D91 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		55593E6F27390E8000FD1D91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		55593E7127390E8000FD1D91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		55593E7427390E8000FD1D91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		55593E7627390E8000FD1D91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55593E7D2739102600FD1D91 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		559318DF27396E220013DE3E /* WordsForGames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsForGames.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +60,49 @@
 		55593E6727390E8000FD1D91 /* Gallows */ = {
 			isa = PBXGroup;
 			children = (
-				55593E6827390E8000FD1D91 /* AppDelegate.swift */,
-				55593E6A27390E8000FD1D91 /* SceneDelegate.swift */,
-				55593E6C27390E8000FD1D91 /* ViewController.swift */,
-				55593E6E27390E8000FD1D91 /* Main.storyboard */,
-				55593E7127390E8000FD1D91 /* Assets.xcassets */,
-				55593E7327390E8000FD1D91 /* LaunchScreen.storyboard */,
-				55593E7627390E8000FD1D91 /* Info.plist */,
+				55593E812739105E00FD1D91 /* App */,
+				55EB3F862739641D006C1E59 /* Models */,
+				55593E802739104D00FD1D91 /* View */,
+				55593E7C27390FFE00FD1D91 /* View Controllers */,
 			);
 			path = Gallows;
+			sourceTree = "<group>";
+		};
+		55593E7C27390FFE00FD1D91 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				55593E7D2739102600FD1D91 /* GameViewController.swift */,
+				55593E6C27390E8000FD1D91 /* WelcomeViewController.swift */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		55593E802739104D00FD1D91 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				55593E7327390E8000FD1D91 /* LaunchScreen.storyboard */,
+				55593E6E27390E8000FD1D91 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		55593E812739105E00FD1D91 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				55593E6827390E8000FD1D91 /* AppDelegate.swift */,
+				55593E7127390E8000FD1D91 /* Assets.xcassets */,
+				55593E7627390E8000FD1D91 /* Info.plist */,
+				55593E6A27390E8000FD1D91 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		55EB3F862739641D006C1E59 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				559318DF27396E220013DE3E /* WordsForGames.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,9 +176,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55593E6D27390E8000FD1D91 /* ViewController.swift in Sources */,
+				55593E7E2739102600FD1D91 /* GameViewController.swift in Sources */,
+				55593E6D27390E8000FD1D91 /* WelcomeViewController.swift in Sources */,
 				55593E6927390E8000FD1D91 /* AppDelegate.swift in Sources */,
 				55593E6B27390E8000FD1D91 /* SceneDelegate.swift in Sources */,
+				559318E027396E220013DE3E /* WordsForGames.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,7 +331,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2ZAR2UCDS8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Gallows/Info.plist;
+				INFOPLIST_FILE = Gallows/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -319,7 +359,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2ZAR2UCDS8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Gallows/Info.plist;
+				INFOPLIST_FILE = Gallows/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
