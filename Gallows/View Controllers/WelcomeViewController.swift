@@ -13,18 +13,38 @@ class WelcomeViewController: UIViewController {
     var listOfWords: [String] = []
     var navigationTitle: String = ""
     var wordsForGame = WordsForGame()
+    var size: CGSize!
+    var factor: CGFloat!
+    
     
     // MARK: - UIProperties
     @IBOutlet var listOfSwitches: [UISwitch]!
     @IBOutlet weak var buttonStart: UIButton!
+    @IBOutlet var listOfLabels: [UILabel]!
     
     
     // MARK: - Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        size = view.bounds.size
+        factor = min(size.height, size.width)
         view.backgroundColor = .white
         navigationItem.title = "New game"
         updateState()
+        correctSize()
+    }
+    
+    func correctSize() {
+        for label in listOfLabels {
+            label.font = UIFont.systemFont(ofSize: factor / 12)
+        }
+        for switchElement in listOfSwitches {
+            switchElement.transform = CGAffineTransform(scaleX: factor / 500, y: factor / 500)
+        }
+        buttonStart.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
+        
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: factor / 25)]
     }
     
     func updateState() {
@@ -62,7 +82,7 @@ class WelcomeViewController: UIViewController {
     }
     
     @IBSegueAction func toGame(_ coder: NSCoder) -> GameViewController? {
-        return GameViewController(coder: coder, listOfWords: listOfWords, navigationTitle: navigationTitle)
+        return GameViewController(coder: coder, listOfWords: listOfWords, navigationTitle: navigationTitle, size: size, factor: factor)
     }
     
     @IBAction func unwind(_ segue: UIStoryboardSegue) {

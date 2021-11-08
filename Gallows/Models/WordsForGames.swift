@@ -6,6 +6,7 @@
 //
 
 struct WordsForGame {
+    
     var cities: [String] = [
         "Александрия",
         "Атланта",
@@ -88,10 +89,11 @@ struct WordsForGame {
         "Шэньян",
         "Эр-Рияд",
         "Янгон",
-    ]
+    ].shuffled()
     
     var movies: [String] = [
         "Мстители",
-        "Звёздные войны",
-        ]
+//        "Звёздные войны",
+    ].shuffled()
+    
 }
