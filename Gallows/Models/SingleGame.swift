@@ -5,10 +5,13 @@
 //  Created by Андрей on 09.11.2021.
 //
 
-struct Game {
+struct SingleGame {
+    
+    // MARK: - Properties
     var word: String
     var incorrectMovesRemaining: Int    // количество оставшихся попыток
-    fileprivate var guessedLetters = [Character].init()   // fileprivate - доступно только в этом файле
+    var guessedLetters = [Character].init()
+    var guessedLettersSecondPlayer = [Character].init() // for multiplayer
     
     init(word: String, incorrectMovesRemaining: Int) {
         self.word = word
@@ -27,6 +30,7 @@ struct Game {
         return wordToShow
     }
     
+    // MARK: - Methods
     mutating func playerGuest(letter: Character) {
         let lowercasedLatter = Character(letter.lowercased())
         guessedLetters.append(lowercasedLatter)

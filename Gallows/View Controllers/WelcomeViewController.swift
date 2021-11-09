@@ -13,14 +13,17 @@ class WelcomeViewController: UIViewController {
     var listOfWords: [String] = []
     var navigationTitle: String = ""
     var wordsForGame = WordsForGame()
+    var buttontag: Int = 0
+    // for correct item size
     var size: CGSize!
     var factor: CGFloat!
     
     
     // MARK: - UIProperties
-    @IBOutlet var listOfSwitches: [UISwitch]!
-    @IBOutlet weak var buttonStart: UIButton!
     @IBOutlet var listOfLabels: [UILabel]!
+    @IBOutlet var listOfSwitches: [UISwitch]!
+    @IBOutlet weak var singleButton: UIButton!
+    @IBOutlet weak var multiButton: UIButton!
     
     
     // MARK: - Methods
@@ -35,6 +38,7 @@ class WelcomeViewController: UIViewController {
         correctSize()
     }
     
+    // function for correct item size
     func correctSize() {
         for label in listOfLabels {
             label.font = UIFont.systemFont(ofSize: factor / 12)
@@ -42,16 +46,19 @@ class WelcomeViewController: UIViewController {
         for switchElement in listOfSwitches {
             switchElement.transform = CGAffineTransform(scaleX: factor / 500, y: factor / 500)
         }
-        buttonStart.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
+        singleButton.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
+        multiButton.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
         
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: factor / 25)]
     }
     
+    // update initial state
     func updateState() {
         for switchElement in listOfSwitches {
             switchElement.isOn = false
         }
-        buttonStart.isEnabled = false
+        singleButton.isEnabled = false
+        multiButton.isEnabled = false
     }
 
     
@@ -62,7 +69,8 @@ class WelcomeViewController: UIViewController {
             return
         }
         
-        buttonStart.isEnabled = true
+        singleButton.isEnabled = true
+        multiButton.isEnabled = true
         switch sender.tag {
         case 0:
             listOfWords = wordsForGame.cities
@@ -81,8 +89,15 @@ class WelcomeViewController: UIViewController {
         }
     }
     
+    
+    
+    @IBAction func buttonPressed(_ sender: UIButton) {
+        buttontag = sender.tag
+        performSegue(withIdentifier: "GameViewController", sender: nil)
+    }
+    
     @IBSegueAction func toGame(_ coder: NSCoder) -> GameViewController? {
-        return GameViewController(coder: coder, listOfWords: listOfWords, navigationTitle: navigationTitle, size: size, factor: factor)
+        return GameViewController(coder: coder, listOfWords: listOfWords, navigationTitle: navigationTitle, size: size, factor: factor, buttontag: buttontag)
     }
     
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
