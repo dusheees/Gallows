@@ -29,10 +29,6 @@ class WelcomeViewController: UIViewController {
     // MARK: - Methods
     
     
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         size = view.bounds.size
