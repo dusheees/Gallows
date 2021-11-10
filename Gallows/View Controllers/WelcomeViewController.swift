@@ -89,19 +89,16 @@ class WelcomeViewController: UIViewController {
         }
     }
     
-    
-    
     @IBAction func buttonPressed(_ sender: UIButton) {
         buttontag = sender.tag
         performSegue(withIdentifier: "GameViewController", sender: nil)
     }
     
     @IBSegueAction func toGame(_ coder: NSCoder) -> GameViewController? {
-        return GameViewController(coder: coder, listOfWords: listOfWords, navigationTitle: navigationTitle, size: size, factor: factor, buttontag: buttontag)
+        return GameViewController(coder: coder, listOfWords: listOfWords, wordsForGame: wordsForGame, navigationTitle: navigationTitle, size: size, factor: factor, buttontag: buttontag)
     }
     
     @IBAction func unwind(_ segue: UIStoryboardSegue) {
-        print(#line, #function)
         updateState()
     }
     

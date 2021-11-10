@@ -17,66 +17,41 @@ class GameViewController: UIViewController {
     let incorrectMovesAllowed = 7
     var totalWins: Int = 0 {
         didSet {
-            newRound()
+            forDidSetSingleplayer(totalWins: totalWins, totalLosses: totalLosses)
         }
     }
     var totalLosses: Int = 0 {
         didSet {
-            newRound()
+            forDidSetSingleplayer(totalWins: totalWins, totalLosses: totalLosses)
         }
     }
     var currentSingleGame: SingleGame!
     // for multigame
+    var wordsForGame = WordsForGame()
+    var listOfWordsFirstPlayer = [String].init()
+    var listOfWordsSecondPlayer = [String].init()
     let incorrectMovesAllowedFirstPlayer = 7
+    let incorrectMovesAllowedSecondPlayer = 7
     var forScoreLabelFirstPlayer: String = ("Выигрыши: 0, проигрыши: 0")
     var forScoreLabelSecondPlayer: String = ("Выигрыши: 0, проигрыши: 0")
     var totalWinsFirstPlayer: Int = 0 {
         didSet {
-            goScoreLabel.text = ("Выигрыши: \(totalWinsFirstPlayer), проигрыши: \(totalLossesFirstPlayer)")
-            forScoreLabelFirstPlayer = goScoreLabel.text!
-            playerTurn = (playerTurn + 1) % 2
-            goLabel.text = ("Следующий ход игрока №\(playerTurn + 1)")
-            intermediateStackView.isHidden = false
-            numberOfPlayer.title = ""
-            gameStackView.isHidden = true
-            newRound()
+            forDidSetMultiplayer(totalWins: totalWinsFirstPlayer, totalLosses: totalLossesFirstPlayer)
         }
     }
     var totalLossesFirstPlayer: Int = 0 {
         didSet {
-            goScoreLabel.text = ("Выигрыши: \(totalWinsFirstPlayer), проигрыши: \(totalLossesFirstPlayer)")
-            forScoreLabelFirstPlayer = goScoreLabel.text!
-            playerTurn = (playerTurn + 1) % 2
-            goLabel.text = ("Следующий ход игрока №\(playerTurn + 1)")
-            intermediateStackView.isHidden = false
-            numberOfPlayer.title = ""
-            gameStackView.isHidden = true
-            newRound()
+            forDidSetMultiplayer(totalWins: totalWinsFirstPlayer, totalLosses: totalLossesFirstPlayer)
         }
     }
-    let incorrectMovesAllowedSecondPlayer = 7
     var totalWinsSecondPlayer: Int = 0 {
         didSet {
-            goScoreLabel.text = ("Выигрыши: \(totalWinsSecondPlayer), проигрыши: \(totalLossesSecondPlayer)")
-            forScoreLabelSecondPlayer = goScoreLabel.text!
-            playerTurn = (playerTurn + 1) % 2
-            goLabel.text = ("Следующий ход игрока №\(playerTurn + 1)")
-            intermediateStackView.isHidden = false
-            numberOfPlayer.title = ""
-            gameStackView.isHidden = true
-            newRound()
+            forDidSetMultiplayer(totalWins: totalWinsSecondPlayer, totalLosses: totalLossesSecondPlayer)
         }
     }
     var totalLossesSecondPlayer: Int = 0 {
         didSet {
-            goScoreLabel.text = ("Выигрыши: \(totalWinsSecondPlayer), проигрыши: \(totalLossesSecondPlayer)")
-            forScoreLabelSecondPlayer = goScoreLabel.text!
-            playerTurn = (playerTurn + 1) % 2
-            goLabel.text = ("Следующий ход игрока №\(playerTurn + 1)")
-            intermediateStackView.isHidden = false
-            numberOfPlayer.title = ""
-            gameStackView.isHidden = true
-            newRound()
+            forDidSetMultiplayer(totalWins: totalWinsSecondPlayer, totalLosses: totalLossesSecondPlayer)
         }
     }
     var currentMultiGame: MultiGame!
@@ -97,12 +72,23 @@ class GameViewController: UIViewController {
     let size: CGSize!
     let factor: CGFloat!
     
-    init?(coder: NSCoder, listOfWords: [String], navigationTitle: String, size: CGSize, factor: CGFloat, buttontag: Int){
+    init?(coder: NSCoder, listOfWords: [String], wordsForGame: WordsForGame, navigationTitle: String, size: CGSize, factor: CGFloat, buttontag: Int){
         self.listOfWords = listOfWords
+        self.wordsForGame = wordsForGame
         self.navigationTitle = navigationTitle
         self.size = size
         self.factor = factor
         self.buttontag = buttontag
+        switch listOfWords {
+        case wordsForGame.cities:
+            listOfWordsFirstPlayer = wordsForGame.cities.shuffled()
+            listOfWordsSecondPlayer = wordsForGame.cities.shuffled()
+        case wordsForGame.movies:
+            listOfWordsFirstPlayer = wordsForGame.movies.shuffled()
+            listOfWordsSecondPlayer = wordsForGame.movies.shuffled()
+        default:
+            print("fatal error")
+        }
         super.init(coder: coder)
     }
     
@@ -124,7 +110,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var goLabel: UILabel!
     @IBOutlet weak var goScoreLabel: UILabel!
     @IBOutlet weak var goButton: UIButton!
-    //result stack view
+    // result stack view
     @IBOutlet weak var resultStackView: UIStackView!
     @IBOutlet weak var finishedTextLabel: UILabel!
     @IBOutlet weak var resultLabel: UILabel!
@@ -143,20 +129,47 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         correctSize()
+        
         resultStackView.isHidden = true
+        resultStackViewForMultiPlayer.isHidden = true
+        intermediateStackView.isHidden = true
+        gameStackView.isHidden = false
+        
         numberOfPlayer.title = titleForNumberOfPlayer
         numberOfPlayer.isEnabled = false
         
-        resultStackViewForMultiPlayer.isHidden = true
-        intermediateStackView.isHidden = true
         navigationItem.title = navigationTitle
         navigationItem.hidesBackButton = true
-        gameStackView.isHidden = false
+        
         updateUI(to: view.bounds.size)
         if buttontag == 0 {
             numberOfPlayer.title = ""
         }
         
+        newRound()
+    }
+    
+    // functions for change wins and losses values
+    func forDidSetSingleplayer(totalWins: Int, totalLosses: Int) {
+        scoreLabel.text = ("Выигрыши: \(totalWins), проигрыши: \(totalLosses)")
+        newRound()
+    }
+    
+    func forDidSetMultiplayer(totalWins: Int, totalLosses: Int) {
+        goScoreLabel.text = ("Выигрыши: \(totalWins), проигрыши: \(totalLosses)")
+        switch playerTurn {
+        case 0:
+            forScoreLabelFirstPlayer = goScoreLabel.text!
+        case 1:
+            forScoreLabelSecondPlayer = goScoreLabel.text!
+        default:
+            print("fatal error")
+        }
+        playerTurn = (playerTurn + 1) % 2
+        goLabel.text = ("Следующий ход игрока №\(playerTurn + 1)")
+        intermediateStackView.isHidden = false
+        gameStackView.isHidden = true
+        numberOfPlayer.title = ""
         newRound()
     }
     
@@ -172,23 +185,17 @@ class GameViewController: UIViewController {
         goScoreLabel.font = UIFont.systemFont(ofSize: factor / 16)
         goButton.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
         
-        finishedTextLabel.font = UIFont.systemFont(ofSize: factor / 16)
-        resultLabel.font = UIFont.systemFont(ofSize: factor / 16)
-        
-        textResultsLabel.font = UIFont.systemFont(ofSize: factor / 16)
-        resultLabelFirstPlayer.font = UIFont.systemFont(ofSize: factor / 17)
-        resultLabelSecondPlayer.font = UIFont.systemFont(ofSize: factor / 17)
-        
-        if size.height / size.width < 2 && size.height / size.width > 0.5{
-            navigationButton.setTitleTextAttributes([ NSAttributedString.Key.font: UIFont.systemFont(ofSize: 0.75 * factor / 25)], for: [])
-            
-            numberOfPlayer.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.systemBlue, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 0.75 * factor / 25)], for: .disabled)
-        } else {
-            navigationButton.setTitleTextAttributes([ NSAttributedString.Key.font: UIFont.systemFont(ofSize: factor / 25)], for: [])
-            
-            numberOfPlayer.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.systemBlue, NSAttributedString.Key.font: UIFont.systemFont(ofSize: factor / 25)], for: .disabled)
+        guard let coefficient = size.height / size.width < 2 && size.height / size.width > 0.5 ? 0.75 : 1 else {
+            return
         }
+        finishedTextLabel.font = UIFont.systemFont(ofSize: coefficient * factor / 16)
+        resultLabel.font = UIFont.systemFont(ofSize: coefficient * factor / 16)
+        textResultsLabel.font = UIFont.systemFont(ofSize: factor / 16)
+        resultLabelFirstPlayer.font = UIFont.systemFont(ofSize: coefficient * factor / 17)
+        resultLabelSecondPlayer.font = UIFont.systemFont(ofSize: coefficient * factor / 17)
         
+        navigationButton.setTitleTextAttributes([ NSAttributedString.Key.font: UIFont.systemFont(ofSize: coefficient * factor / 25)], for: [])
+        numberOfPlayer.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.systemBlue, NSAttributedString.Key.font: UIFont.systemFont(ofSize: coefficient * factor / 25)], for: .disabled)
         
     }
     
@@ -199,10 +206,11 @@ class GameViewController: UIViewController {
     }
     
     func newRound() {
-        guard !listOfWords.isEmpty else {
+        if listOfWords.isEmpty || listOfWordsSecondPlayer.isEmpty {
             enabledButtons(false)
             intermediateStackView.isHidden = true
             gameStackView.isHidden = true
+            resultStackView.isHidden = false
             resultLabel.text = scoreLabel.text
             if buttontag == 1 {
                 if totalWinsFirstPlayer > totalWinsSecondPlayer {
@@ -212,59 +220,48 @@ class GameViewController: UIViewController {
                 } else {
                     resultLabel.text = "Ничья"
                 }
-            }
-            resultStackView.isHidden = false
-            if buttontag == 1 {
+                
                 resultLabel.textColor = .red
                 resultLabelFirstPlayer.textColor = .systemBlue
-                resultLabelFirstPlayer.text = "№1: " + forScoreLabelFirstPlayer
                 resultLabelSecondPlayer.textColor = .systemBlue
+                resultLabelFirstPlayer.text = "№1: " + forScoreLabelFirstPlayer
                 resultLabelSecondPlayer.text = "№2: " + forScoreLabelSecondPlayer
                 resultStackViewForMultiPlayer.isHidden = false
             }
             updateUI()
             return
-        }
-        let newWord = listOfWords.removeFirst()
-        switch buttontag {
-        case 0:
-            currentSingleGame = SingleGame(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
-        case 1:
-            currentMultiGame = MultiGame(word: newWord, incorrectMovesRemainingFirstPlayer: incorrectMovesAllowedFirstPlayer, incorrectMovesRemainingSecondPlayer: incorrectMovesAllowedSecondPlayer, playerTurn: playerTurn)
-        default:
-            print("fatal error")
-        }
-        updateUI()
-        enabledButtons()
-    }
-    
-    // for correct word representation
-    func updateWordLabel() {
-        var displayWord: [String] = []
-        switch buttontag {
-        case 0:
-            for letter in currentSingleGame.guessedWord {
-                displayWord.append(String(letter))
-            }
-        case 1:
-            switch playerTurn {
+        } else {
+            switch buttontag {
             case 0:
-                for letter in currentMultiGame.guessedWordFirstPlayer {
-                    displayWord.append(String(letter))
-                }
+                currentSingleGame = SingleGame(word: listOfWords.removeFirst(), incorrectMovesRemaining: incorrectMovesAllowed)
             case 1:
-                for letter in currentMultiGame.guessedWordSecondPlayer {
-                    displayWord.append(String(letter))
+                switch playerTurn {
+                case 0:
+                    currentMultiGame = MultiGame(word: listOfWordsFirstPlayer.removeFirst(), incorrectMovesRemainingFirstPlayer: incorrectMovesAllowedFirstPlayer, incorrectMovesRemainingSecondPlayer: incorrectMovesAllowedSecondPlayer, playerTurn: playerTurn)
+                case 1:
+                    currentMultiGame = MultiGame(word: listOfWordsSecondPlayer.removeFirst(), incorrectMovesRemainingFirstPlayer: incorrectMovesAllowedFirstPlayer, incorrectMovesRemainingSecondPlayer: incorrectMovesAllowedSecondPlayer, playerTurn: playerTurn)
+                default:
+                    print("fatal error")
                 }
+                
             default:
                 print("fatal error")
             }
-        default:
-            print("fatal error")
+            updateUI()
+            enabledButtons()
+        }
+    }
+    
+    // for correct word representation
+    func updateWordLabel(guessedWord: String) {
+        var displayWord: [String] = []
+        for letter in guessedWord {
+            displayWord.append(String(letter))
         }
         correctWordLabel.text = displayWord.joined(separator: " ")
     }
     
+    // update wins and losses
     func updateState() {
         switch buttontag {
         case 0:
@@ -302,7 +299,6 @@ class GameViewController: UIViewController {
     }
     
     func updateUI() {
-        
         switch buttontag {
         case 0:
             let movesRemaining = currentSingleGame.incorrectMovesRemaining
@@ -310,6 +306,7 @@ class GameViewController: UIViewController {
             let image = "Tree\(imageNumber)"
             treeImageView.image = UIImage(named: image)
             scoreLabel.text = ("Выигрыши: \(totalWins), проигрыши: \(totalLosses)")
+            updateWordLabel(guessedWord: currentSingleGame.guessedWord)
         case 1:
             let movesRemainingFirstPlayer = currentMultiGame.incorrectMovesRemainingFirstPlayer
             let movesRemainingSecondPlayer = currentMultiGame.incorrectMovesRemainingSecondPlayer
@@ -321,19 +318,18 @@ class GameViewController: UIViewController {
                 let imageFirstPlayer = "Tree\(imageNumberFirstPlayer)"
                 treeImageView.image = UIImage(named: imageFirstPlayer)
                 scoreLabel.text = forScoreLabelFirstPlayer
+                updateWordLabel(guessedWord: currentMultiGame.guessedWordFirstPlayer)
             case 1:
                 let imageSecondPlayer = "Tree\(imagenumberSecondPlayer)"
                 treeImageView.image = UIImage(named: imageSecondPlayer)
                 scoreLabel.text = forScoreLabelSecondPlayer
+                updateWordLabel(guessedWord: currentMultiGame.guessedWordSecondPlayer)
             default:
                 print("fatal error")
             }
-
         default:
             print("fatal error")
         }
-        
-        updateWordLabel()
     }
     
     // for correct change of size
@@ -357,7 +353,6 @@ class GameViewController: UIViewController {
     
     
     @IBAction func letterButtonPressed(_ sender: UIButton) {
-        
         let letter = sender.title(for: .normal)!
         switch buttontag {
         case 0:
@@ -371,14 +366,12 @@ class GameViewController: UIViewController {
                 case 0:
                     if currentMultiGame.guessedLettersFirstPlayer.contains(Character((`button`.title(for: .normal)?.lowercased())!)) {
                         `button`.isEnabled = false
-                        print(currentMultiGame.guessedLettersFirstPlayer)
                     } else {
                         `button`.isEnabled = true
                     }
                 case 1:
                     if currentMultiGame.guessedLettersSecondPlayer.contains(Character((`button`.title(for: .normal)?.lowercased())!)) {
                         `button`.isEnabled = false
-                        print(currentMultiGame.guessedLettersSecondPlayer)
                     } else {
                         `button`.isEnabled = true
                     }
@@ -392,7 +385,5 @@ class GameViewController: UIViewController {
         
         updateState()
     }
-    
-    
     
 }

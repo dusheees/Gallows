@@ -38,4 +38,5 @@ struct SingleGame {
             incorrectMovesRemaining -= 1
         }
     }
+    
 }

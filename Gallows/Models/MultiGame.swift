@@ -23,21 +23,18 @@ struct MultiGame {
     }
     
     var guessedWordFirstPlayer: String {
-        var wordToShow = ""
-        for letter in word {
-            if guessedLettersFirstPlayer.contains(Character(letter.lowercased())) || letter == "-" || letter == " "{
-                wordToShow += String(letter)
-            } else {
-                wordToShow += "_"
-            }
-        }
-        return wordToShow
+        return forGuessedWord(guessedLetters: guessedLettersFirstPlayer)
     }
     
     var guessedWordSecondPlayer: String {
+        return forGuessedWord(guessedLetters: guessedLettersSecondPlayer)
+    }
+    
+    // MARK: - Methods
+    func forGuessedWord(guessedLetters: [Character]) -> String {
         var wordToShow = ""
         for letter in word {
-            if guessedLettersSecondPlayer.contains(Character(letter.lowercased())) || letter == "-" || letter == " " {
+            if guessedLetters.contains(Character(letter.lowercased())) || letter == "-" || letter == " " {
                 wordToShow += String(letter)
             } else {
                 wordToShow += "_"
@@ -46,7 +43,6 @@ struct MultiGame {
         return wordToShow
     }
     
-    // MARK: - Methods
     mutating func playerGuest(letter: Character) {
         let lowercasedLatter = Character(letter.lowercased())
         switch playerTurn {
@@ -63,6 +59,6 @@ struct MultiGame {
         default:
             print("fatal error")
         }
-        
     }
+    
 }
