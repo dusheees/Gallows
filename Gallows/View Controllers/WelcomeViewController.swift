@@ -28,6 +28,11 @@ class WelcomeViewController: UIViewController {
     
     // MARK: - Methods
     
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         size = view.bounds.size
@@ -49,7 +54,7 @@ class WelcomeViewController: UIViewController {
         singleButton.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
         multiButton.titleLabel?.font = UIFont.systemFont(ofSize: factor / 12)
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont.systemFont(ofSize: factor / 25)]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black , NSAttributedString.Key.font: UIFont.systemFont(ofSize: factor / 25)]
     }
     
     // update initial state
